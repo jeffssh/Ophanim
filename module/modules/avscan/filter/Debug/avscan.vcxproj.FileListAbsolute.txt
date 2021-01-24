@@ -1,0 +1,2 @@
+C:\Users\User\source\repos\Windows-driver-samples\filesys\miniFilter\avscan\filter\Debug\avscan.sys
+C:\Users\User\source\repos\Windows-driver-samples\filesys\miniFilter\avscan\filter\Debug\avscan.pdb
