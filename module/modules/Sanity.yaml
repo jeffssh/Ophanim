@@ -2,4 +2,4 @@ name: Sanity
 description: A sanity check module. This implements module gRPC in golang, reports back that it's working, and exits.
 key: Sanity
 command: sanity.exe
-enabled: false
+enabled: true

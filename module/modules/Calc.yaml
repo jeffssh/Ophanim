@@ -2,4 +2,4 @@ name: Calc
 description: A template module showing basic functionality. This modules just opens calc.
 key: Calc
 command: calc.exe
-enabled: true
+enabled: false

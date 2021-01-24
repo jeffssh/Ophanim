@@ -29,17 +29,19 @@ service ReportMessageService {
 
 // The request message containing the user's name.
 message ReportMessage {
+  enum ReportMessageType {
+    Informational = 0;
+    Vulnerability = 1;
+  }
+
   enum Confidence {
       Low = 0;
       Medium = 1;
       High = 2;
       Certain = 3;
   }
-  enum ReportMessageType {
-    Informational = 0;
-    Vulnerability = 1;
-}
+
     ReportMessageType reportMessageType = 1;
     Confidence confidence = 2;
-    string reportMessage = 3;
+    string description = 3;
 }
