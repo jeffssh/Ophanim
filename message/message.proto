@@ -1,0 +1,45 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option go_package = "github.com/jeffssh/Ophanim/message";
+
+import "google/protobuf/empty.proto";
+
+package message;
+
+
+// The message service definition.
+service ReportMessageService {
+  // Sends a greeting
+  rpc SendReportMessage (ReportMessage) returns (google.protobuf.Empty) {}
+}
+
+// The request message containing the user's name.
+message ReportMessage {
+  enum Confidence {
+      Low = 0;
+      Medium = 1;
+      High = 2;
+      Certain = 3;
+  }
+  enum ReportMessageType {
+    Informational = 0;
+    Vulnerability = 1;
+}
+    ReportMessageType reportMessageType = 1;
+    Confidence confidence = 2;
+    string reportMessage = 3;
+}

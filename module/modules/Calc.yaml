@@ -1,5 +1,5 @@
 name: Calc
 description: A template module showing basic functionality. This modules just opens calc.
-pipe: Ophanim-Calc
+key: Calc
 command: calc.exe
 enabled: true

@@ -1,5 +1,5 @@
 name: Notepad
 description: A template module showing basic functionality. This modules just opens notepad.
-pipe: Ophanim-Notepad
+key: Notepad
 command: notepad.exe
 enabled: true
