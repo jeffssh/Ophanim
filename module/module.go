@@ -21,6 +21,9 @@ type Module struct {
 	cmd *exec.Cmd
 }
 
+// Map - Map of Modules
+type Map map[string]*Module
+
 // Start - Start the module per the specified command
 func (m *Module) Start() (err error) {
 	if !m.Enabled {
@@ -94,14 +97,14 @@ func LoadModule(modulePath string) (m *Module, err error) {
 }
 
 // LoadAllModules - load all modules in a directory
-func LoadAllModules(moduleDir string) (modules map[string]*Module) {
+func LoadAllModules(moduleDir string) (modules Map) {
 	moduleFiles, err := ioutil.ReadDir(moduleDir)
 	if err != nil {
 		log.Printf("Error loading module files: %v", err)
 		return
 	}
 
-	modules = make(map[string]*Module)
+	modules = make(Map)
 	for _, f := range moduleFiles {
 		m, err := LoadModule(moduleDir + f.Name())
 		if err == nil {
@@ -109,4 +112,26 @@ func LoadAllModules(moduleDir string) (modules map[string]*Module) {
 		}
 	}
 	return
+}
+
+// Stop - stop all modules in a map
+func (modules Map) Stop() {
+	for _, m := range modules {
+		err := m.Stop()
+		if err != nil {
+			log.Printf("Error when stopping module %s command %s: %v", m.Name, m.Command, err)
+		}
+	}
+}
+
+// Start - start all modules in a map
+func (modules Map) Start() {
+	for _, m := range modules {
+		//sep := "======================================="
+		//log.Printf("Loaded module:\n%s\n%v\n%s", sep, m, sep)
+		err := m.Start()
+		if err != nil {
+			log.Printf("Error when starting module %s, command %s: %v", m.Name, m.Command, err)
+		}
+	}
 }

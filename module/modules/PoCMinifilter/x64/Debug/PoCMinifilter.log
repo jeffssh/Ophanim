@@ -1,0 +1,19 @@
+﻿  Building 'PoCMinifilter' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping x64\Debug\PoCMinifilter.inf
+  Stamping [Version] section with DriverVer=01/29/2021,9.13.10.707
+  PoCMinifilter.vcxproj -> C:\Users\User\Desktop\Ophanim\module\modules\PoCMinifilter\x64\Debug\PoCMinifilter.sys
+  Driver is 'Universal'.
+  .........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  C:\Users\User\Desktop\Ophanim\module\modules\PoCMinifilter\x64\Debug\PoCMinifilter\pocminifilter.cat
+  Done Adding Additional Store
+  Successfully signed: C:\Users\User\Desktop\Ophanim\module\modules\PoCMinifilter\x64\Debug\PoCMinifilter\pocminifilter.cat
+  

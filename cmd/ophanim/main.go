@@ -3,49 +3,15 @@ package main
 import (
 	"log"
 	"net"
-	"os"
-	"os/signal"
-	"syscall"
 
+	"github.com/jeffssh/Ophanim/cli"
 	"github.com/jeffssh/Ophanim/message"
-	"github.com/jeffssh/Ophanim/module"
 )
 
 const (
 	network = "tcp"
 	address = "127.0.0.1:9999"
 )
-
-func startModules(modules map[string]*module.Module) {
-	for _, m := range modules {
-		sep := "======================================="
-		log.Printf("Loaded module:\n%s\n%+v\n%s", sep, m, sep)
-		err := m.Start()
-		if err != nil {
-			log.Printf("Error when starting module %s, command %s: %v", m.Name, m.Command, err)
-		}
-	}
-}
-
-func stopModules(modules map[string]*module.Module) {
-	for _, m := range modules {
-		err := m.Stop()
-		if err != nil {
-			log.Printf("Error when stopping module %s command %s: %v", m.Name, m.Command, err)
-		}
-	}
-}
-
-func setupCloseHandler(modules map[string]*module.Module) {
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		log.Printf("\rCtrl+C pressed in terminal, stopping modules")
-		stopModules(modules)
-		os.Exit(0)
-	}()
-}
 
 func main() {
 
@@ -56,12 +22,16 @@ func main() {
 
 	s := message.NewMessageServer()
 	log.Printf("Hosting message gRPC server using %s at %s", network, address)
+	go func() {
+		if err := s.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %v", err)
+		}
+	}()
 
-	modules := module.LoadAllModules("./module/modules/")
-	startModules(modules)
-	setupCloseHandler(modules)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	c := cli.New()
+	for {
+		c.Prompt()
 	}
-
 }
+
+//𓁹𓁹 𓁺 𓁻 𓁼 𓁽 𓁾 𓁿

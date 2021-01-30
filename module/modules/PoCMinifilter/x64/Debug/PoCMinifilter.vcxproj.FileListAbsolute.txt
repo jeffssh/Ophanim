@@ -1,0 +1,2 @@
+C:\Users\User\Desktop\Ophanim\module\modules\PoCMinifilter\x64\Debug\PoCMinifilter.sys
+C:\Users\User\Desktop\Ophanim\module\modules\PoCMinifilter\x64\Debug\PoCMinifilter.pdb

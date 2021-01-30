@@ -1,0 +1,124 @@
+;
+; PoCMinifilter.inf
+;
+;; ROOT\ACTIVITYMONITOR\0000 -> Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\ROOT 
+;; change  Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\FltMgr 
+;; useful commands
+;; pnputil /enum-drivers |  Select-String -Pattern pocminifilter -Context 2
+;; pnputil /delete-driver oem*.inf 
+;; fltmc - list filters
+;;start devmgmt.msc -  to delete minifilters, start and show hidden devices
+
+;; useful logs = C:\Windows\Inf\setupapi.dev.log
+;DriverEntry failed 0xc0000034 for driver \REGISTRY\MACHINE\SYSTEM\ControlSet001\Services\PoCMinifilter
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=ActivityMonitor ; TODO: edit Class
+ClassGuid={b86dff51-a31e-4bac-b3cf-e8cfe75c9fc2} ; TODO: edit ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=PoCMinifilter.cat
+DriverVer = 01/29/2021,9.13.10.707
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+PoCMinifilter_Device_CoInstaller_CopyFiles = 11
+
+; ================= Class section =====================
+
+;[ClassInstall32]
+;Addreg=PoCMinifilterRegistry;;;SampleClassReg
+
+;;;[SampleClassReg]
+;;;HKR,,,0,%ClassName%
+;;;HKR,,Icon,,-5
+
+
+;;;[PoCMinifilter.AddRegistry]
+;;;HKR,,"SupportedFeatures",0x00010001,0x3
+;;;HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+;;;HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+;;;HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+[PoCMinifilterRegistry]
+;HKR,,"SupportedFeatures",0x00010001,0x3
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+PoCMinifilter.sys  = 1,,
+;
+
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%PoCMinifilter.DeviceDesc%=PoCMinifilter_Device, Root\Ophanim\PoCMinifilter ; TODO: edit hw-id
+
+[PoCMinifilter_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+PoCMinifilter.sys
+
+;-------------- Service installation
+[PoCMinifilter_Device.NT.Services]
+AddService = PoCMinifilter,%SPSVCINST_ASSOCSERVICE%,PoCMinifilter_Service_Inst
+
+
+; -------------- PoCMinifilter driver install sections
+[PoCMinifilter_Service_Inst]
+DisplayName    = %PoCMinifilter.SVCDESC%
+Dependencies     = "FltMgr"
+ServiceType    = 2               ; SERVICE_FILE_SYSTEM_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\PoCMinifilter.sys ;%windir%\system32\drivers\
+Addreg=PoCMinifilterRegistry;;;SampleClassReg
+
+;
+;--- PoCMinifilter_Device Coinstaller installation ------
+;
+
+[PoCMinifilter_Device.NT.CoInstallers]
+AddReg=PoCMinifilter_Device_CoInstaller_AddReg
+CopyFiles=PoCMinifilter_Device_CoInstaller_CopyFiles
+
+[PoCMinifilter_Device_CoInstaller_AddReg]
+;
+
+
+[PoCMinifilter_Device_CoInstaller_CopyFiles]
+;
+
+
+[PoCMinifilter_Device.NT.Wdf]
+KmdfService =  PoCMinifilter, PoCMinifilter_wdfsect
+[PoCMinifilter_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="Ophanim - FINDME" ;TODO: Replace with your manufacturer name
+ClassName="Samples" ; TODO: edit ClassName
+DiskName = "PoCMinifilter Installation Disk"
+PoCMinifilter.DeviceDesc = "PoCMinifilter Device"
+PoCMinifilter.SVCDESC = "PoCMinifilter Service"
+;Instances specific information.
+DefaultInstance         = "PoCMinifilterDefaultInstance"
+Instance1.Name          = "PoCMinifilterDefaultInstance"; 
+Instance1.Altitude      = "370000"
+Instance1.Flags         = 0x0          ; 0x01 = Suppress automatic attachments, 0x02 = suppress manual attachment
+
