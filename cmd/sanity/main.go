@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/jeffssh/Ophanim/message"
+	message "github.com/jeffssh/Ophanim/message"
 	"google.golang.org/grpc"
 )
 

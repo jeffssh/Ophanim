@@ -28,7 +28,7 @@ func main() {
 		}
 	}()
 
-	c := cli.New()
+	c := cli.New("./module/modules/yaml/")
 	for {
 		c.Prompt()
 	}

@@ -17,8 +17,7 @@ type Module struct {
 	Key         string `yaml:"key"`
 	Command     string `yaml:"command"`
 	Enabled     bool   `yaml:"enabled"`
-	//Channel     chan message.Message
-	cmd *exec.Cmd
+	cmd         *exec.Cmd
 }
 
 // Map - Map of Modules
@@ -29,14 +28,6 @@ func (m *Module) Start() (err error) {
 	if !m.Enabled {
 		return
 	}
-
-	/*
-		m.Channel = make(chan message.Message)
-		err = m.createNamedPipe()
-		if err != nil {
-			return
-		}
-	*/
 	if m.Command == "" {
 		log.Printf("Module %s started", m.Name)
 		return
@@ -119,7 +110,7 @@ func (modules Map) Stop() {
 	for _, m := range modules {
 		err := m.Stop()
 		if err != nil {
-			log.Printf("Error when stopping module %s command %s: %v", m.Name, m.Command, err)
+			fmt.Printf("Error when stopping module %s command %s: %v\n", m.Name, m.Command, err)
 		}
 	}
 }
@@ -127,11 +118,33 @@ func (modules Map) Stop() {
 // Start - start all modules in a map
 func (modules Map) Start() {
 	for _, m := range modules {
-		//sep := "======================================="
-		//log.Printf("Loaded module:\n%s\n%v\n%s", sep, m, sep)
 		err := m.Start()
 		if err != nil {
-			log.Printf("Error when starting module %s, command %s: %v", m.Name, m.Command, err)
+			fmt.Printf("Error when starting module %s, command %s: %v\n", m.Name, m.Command, err)
 		}
+	}
+}
+
+// Enable - enable all modules in a map
+func (modules Map) Enable() {
+	for _, m := range modules {
+		m.Enabled = true
+	}
+	fmt.Printf("Enabled %d modules\n", len(modules))
+}
+
+// Disable - enable all modules in a map
+func (modules Map) Disable() {
+	for _, m := range modules {
+		m.Enabled = false
+	}
+	fmt.Printf("Disabled %d modules\n", len(modules))
+}
+
+// Describe - start all modules in a map
+func (modules Map) Describe() {
+	for _, m := range modules {
+		sep := "======================================="
+		fmt.Printf("%s\n%v\n%s\n", sep, m, sep)
 	}
 }
